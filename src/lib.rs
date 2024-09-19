@@ -2,21 +2,20 @@ use x509_parser::{
     certificate::X509Certificate, error::X509Error, pem, prelude::FromDer, public_key::PublicKey,
 };
 
-// pub fn parse_pem(input: &[u8]) -> Result<X509Certificate, X509Error> {
-//     let der = pem_to_der(input)?;
-//     Ok(parse_der(&der.clone())?)
-// }
-
-pub fn parse_der(input: &[u8]) -> Result<X509Certificate, X509Error> {
-    let (_remaining, cert) = X509Certificate::from_der(input)?;
-    Ok(cert)
-}
-
+/// Convert a pem encoded certificate to a der encoded certificate
 pub fn pem_to_der(input: &[u8]) -> Result<Vec<u8>, X509Error> {
     let (_data, pem) = pem::parse_x509_pem(input).map_err(|_| X509Error::Generic)?;
     Ok(pem.contents)
 }
 
+/// Parse a der encoded certificate to an X509Certificate struct
+pub fn parse_der(input: &[u8]) -> Result<X509Certificate, X509Error> {
+    let (_remaining, cert) = X509Certificate::from_der(input)?;
+    Ok(cert)
+}
+
+/// Given an X509Certificate, get the subject public key, assuming it is ECDSA, and encoded it to
+/// bytes
 pub fn x509_to_subject_public_key(input: X509Certificate) -> Result<Vec<u8>, X509Error> {
     let public_key = input.tbs_certificate.subject_pki.parsed()?;
     match public_key {
