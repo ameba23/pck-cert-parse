@@ -51,9 +51,9 @@ mod test {
     #[test]
     fn verify_valid_cert_chain() {
 
-            let leaf_cert: Vec<u8> = include_bytes!("../../../informalsystems/cycles-quartz/cosmwasm/packages/quartz-tee-ra/data/leaf_cert.pem").to_vec();
-    let intermediate_cert: Vec<u8> = include_bytes!("../../../informalsystems/cycles-quartz/cosmwasm/packages/quartz-tee-ra/data/processor_ca.pem").to_vec();
-        let root_cert: Vec<u8> = include_bytes!("../../../informalsystems/cycles-quartz/cosmwasm/packages/quartz-tee-ra/data/root_ca.pem").to_vec();
+            let leaf_cert: Vec<u8> = include_bytes!("leaf_cert.pem").to_vec();
+    let intermediate_cert: Vec<u8> = include_bytes!("processor_ca.pem").to_vec();
+        let root_cert: Vec<u8> = include_bytes!("root_ca.pem").to_vec();
         
         let der_chain = [leaf_cert, intermediate_cert, root_cert]
             .iter()
