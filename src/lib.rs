@@ -30,3 +30,16 @@ pub fn verify_pck(pck: &X509Certificate, pcs: &X509Certificate) -> bool {
     let issuer_public_key = pcs.public_key();
     pck.verify_signature(Some(issuer_public_key)).is_ok()
 }
+
+/// Verify a certificate chain: The signature of each certificate is verified against the public key of the previous certificate
+pub fn verify_cert_chain(v: Vec<X509Certificate>) -> Result<(), X509Error> {
+    let mut keys: Vec<usize> = (1..v.len()).collect();
+        keys.push(v.len() - 1);
+        let certs: Vec<usize> = (0..v.len()).collect();
+        for (k, c) in core::iter::zip(keys, certs) {
+            let _verify =  v[c].verify_signature(Some(v[k].public_key()))?;
+        }
+    Ok(())
+}
+
+
